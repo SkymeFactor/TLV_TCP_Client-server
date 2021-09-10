@@ -116,4 +116,4 @@ namespace easyBER {
         }
     };
 
-}
+} // namespace easyBER
