@@ -1,13 +1,40 @@
-CC=g++
-CFLAGS=-std=c++17 -lpthread
+#------------------------------------------------------------
+#	Variables
+#------------------------------------------------------------
 
-all: server client
+# Compiler
+CXX=g++
+CXXFLAGS=-std=c++17 -lpthread -pthread
 
-server:
-	$(CC) main_server.cpp -o server.x86_64 $(CFLAGS) 
+# Directories
+SRC_DIR=src/
+OBJ_DIR=obj/
+INCLUDE_DIR=$(SRC_DIR)include/
+BIN_DIR=build/
 
-client:
-	$(CC) main_client.cpp -o client.x86_64 $(CFLAGS) 
+# Files
+SOURCES=$(wildcard $(SRC_DIR)*.cpp)
+OBJECTS=$(SOURCES:$(SRC_DIR)%.cpp=%.o)
+INCLUDE=-I $(INCLUDE_DIR)
+BINARIES=server.elf client.elf
+
+# Cleaner
+RM=rm -rf
+
+#------------------------------------------------------------
+#	Targets
+#------------------------------------------------------------
+
+.PHONY: all clean
+
+all: $(BINARIES)
+
+$(OBJECTS): %.o: $(SRC_DIR)%.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCLUDE) $< -o $(OBJ_DIR)$@
+
+$(BINARIES): %.elf: main_%.o
+	$(CXX) $(CXXFLAGS) $(OBJ_DIR)$< -o $(BIN_DIR)$@
 
 clean:
-	rm -rf *.x86_64 *.o
+	$(RM) $(OBJECTS)
+	$(RM) $(BIN_DIR)*.elf
