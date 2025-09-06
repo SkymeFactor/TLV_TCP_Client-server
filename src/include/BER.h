@@ -19,6 +19,7 @@ namespace easyBER {
             decodeLength(string);
         }
 
+        /// TODO: fix memory leaks
         ~BERmsg<T> () {};
 
         static size_t getTotalLengthFromHeader (char *header) {
@@ -40,7 +41,6 @@ namespace easyBER {
         }
 
         char *translateToCString () {
-            
             char *result;
             int add_len = 0;
 
